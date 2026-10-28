@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML-Based Inefficient Code Pattern Detector Studio | Static Analysis & Code Smells</title>
+    <meta name="description" content="Machine Learning-Assisted Static Analysis for detecting inefficient C/C++ code patterns and performance smells during compilation passes.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <div class="brand-section">
+            <div class="brand-icon">⚡</div>
+            <div>
+                <h1 class="brand-title">ML Inefficient Code Detector</h1>
+                <div class="brand-subtitle">Static Analysis & Code-Smell Classification • 24BCB7071 | 24BCB7178</div>
+            </div>
+        </div>
+
+        <div class="nav-badges">
+            <div class="status-badge" title="Trained Random Forest Classifier">
+                <span class="status-dot"></span>
+                <span>Random Forest • 92.3% Acc</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Application Container -->
+    <main class="main-container">
+        <div class="app-grid">
+
+            <!-- Left Column: Source Code Editor & Controls -->
+            <section class="glass-panel" aria-labelledby="editor-heading">
+                <div class="panel-header">
+                    <div class="panel-title" id="editor-heading">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                        <span>C/C++ Source Code</span>
+                    </div>
+                    <span class="file-type-pill">C / C++ Compiler Pass</span>
+                </div>
+
+                <!-- Preset Quick-Load Chips -->
+                <div class="presets-bar" role="toolbar" aria-label="Sample Presets">
+                    <button type="button" class="preset-chip active" data-preset="inefficient_strlen" id="preset-inefficient-strlen">
+                        <span class="chip-tag-red">●</span> Invariant strlen in Loop
+                    </button>
+                    <button type="button" class="preset-chip" data-preset="clean_sum" id="preset-clean-sum">
+                        <span class="chip-tag-green">●</span> Clean Array Sum
+                    </button>
+                    <button type="button" class="preset-chip" data-preset="inefficient_malloc" id="preset-inefficient-malloc">
+                        <span class="chip-tag-red">●</span> Heap Leak in Loop
+                    </button>
+                    <button type="button" class="preset-chip" data-preset="clean_binary_search" id="preset-clean-binary">
+                        <span class="chip-tag-green">●</span> Binary Search
+                    </button>
+                    <button type="button" class="preset-chip" data-preset="inefficient_redundant_expr" id="preset-redundant-expr">
+                        <span class="chip-tag-red">●</span> Redundant Sub-Expressions
+                    </button>
+                </div>
+
+                <!-- Editor Window -->
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <span>source_code.c</span>
+                        <div class="toolbar-actions">
+                            <input type="file" id="fileInput" accept=".c,.cpp,.h,.txt" style="display: none;">
+                            <button type="button" class="tool-btn" id="uploadBtn">📁 Upload File</button>
+                            <button type="button" class="tool-btn" id="clearBtn">🧹 Clear</button>
+                        </div>
+                    </div>
+                    <textarea 
+                        id="codeEditor" 
+                        class="code-textarea" 
+                        spellcheck="false" 
+                        placeholder="// Paste or write C/C++ source code here..."
+                        aria-label="C Source Code Input">{{ presets['inefficient_strlen']['code'] }}</textarea>
+                </div>
+
+                <!-- Controls & Trigger -->
+                <div class="controls-row">
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span>Warning Threshold</span>
+                            <span class="slider-val" id="thresholdDisplay">60%</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            id="thresholdSlider" 
+                            class="custom-slider" 
+                            min="0.50" 
+                            max="0.90" 
+                            step="0.05" 
+                            value="0.60"
+                            aria-label="Prediction Sensitivity Threshold">
+                    </div>
+
+                    <button type="button" class="analyze-btn" id="analyzeBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <span>Analyze Code Smells</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right Column: Real-time Analysis Dashboard -->
+            <section class="glass-panel" aria-labelledby="results-heading">
+                <div class="panel-header">
+                    <div class="panel-title" id="results-heading">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        <span>ML Inspection Dashboard</span>
+                    </div>
+                    <span class="file-type-pill" id="liveTag">Live Inference</span>
+                </div>
+
+                <!-- Empty State (Placeholder) -->
+                <div class="empty-results" id="emptyResults" style="display: none;">
+                    <div class="empty-icon">⚡</div>
+                    <h3>No Code Analyzed Yet</h3>
+                    <p>Enter C/C++ code on the left or select a preset and click "Analyze Code Smells".</p>
+                </div>
+
+                <!-- Active Results Content -->
+                <div class="results-container" id="resultsContainer">
+                    
+                    <!-- Prediction Banner -->
+                    <div class="prediction-banner inefficient" id="predictionBanner">
+                        <div class="banner-content">
+                            <span class="banner-tag" id="bannerTag">CODE SMELL DETECTED</span>
+                            <h2 class="banner-verdict" id="bannerVerdict">POTENTIALLY INEFFICIENT</h2>
+                            <p class="banner-subtext" id="bannerSubtext">Model flagged this file as inefficient with 86.2% risk confidence.</p>
+                        </div>
+
+                        <!-- Radial Progress Risk Gauge -->
+                        <div class="risk-meter">
+                            <div class="radial-progress">
+                                <svg viewBox="0 0 80 80">
+                                    <circle class="circle-bg" cx="40" cy="40" r="34"></circle>
+                                    <circle class="circle-val" id="circleVal" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="30"></circle>
+                                </svg>
+                                <span class="gauge-percentage" id="riskPercentageText">86%</span>
+                            </div>
+                            <span class="gauge-caption" id="gaugeCaption">High Risk</span>
+                        </div>
+                    </div>
+
+                    <!-- Static Heuristic Evidence Card -->
+                    <div class="evidence-card">
+                        <div class="evidence-header">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <span>Heuristic Static Evidence</span>
+                        </div>
+                        <ul class="evidence-list" id="evidenceList">
+                            <!-- Populated dynamically by JS -->
+                        </ul>
+                    </div>
+
+                    <!-- Actionable Refactoring Recommendations -->
+                    <div class="recommend-card">
+                        <div class="recommend-title">
+                            <span>💡</span> Refactoring Recommendation
+                        </div>
+                        <div class="recommend-text" id="recommendText">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- 13 Extracted Features Grid -->
+                    <div>
+                        <div class="features-section-title">13 Extracted Lexical & Syntactic Features</div>
+                        <div class="features-grid" id="featuresGrid">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Model Intelligence & Evaluation Metrics Strip -->
+        <section class="stats-strip" aria-label="Model Performance Metrics">
+            <div class="stat-item">
+                <span class="stat-num">{{ "%.1f"|format(metrics.get('accuracy', 0.923) * 100) }}%</span>
+                <span class="stat-desc">Test Accuracy</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">{{ "%.1f"|format(metrics.get('precision', 0.857) * 100) }}%</span>
+                <span class="stat-desc">Precision Score</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">{{ "%.1f"|format(metrics.get('recall', 1.0) * 100) }}%</span>
+                <span class="stat-desc">Recall Rate</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">{{ "%.3f"|format(metrics.get('f1_score', 0.923)) }}</span>
+                <span class="stat-desc">F1-Score</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">Random Forest</span>
+                <span class="stat-desc">Classifier Architecture</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">50 Samples</span>
+                <span class="stat-desc">Balanced Dataset</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>ML-Based Automatic Detection of Inefficient Code Patterns During Compilation • Academic Prototype</p>
+        <p style="margin-top: 0.35rem;">Software Engineering Project • Student IDs: 24BCB7071 | 24BCB7178</p>
+    </footer>
+
+    <!-- Client Application Script -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
