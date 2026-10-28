@@ -1,0 +1,74 @@
+source,label
+int sum=0; for(int i=0;i<n;i++){ sum += a[i]; },0
+int limit = n; for(int i=0;i<limit;i++){ sum += a[i]; },0
+for(int i=0;i<n;i++){ total += values[i]; },0
+if (x > 0) { y=x; } else { y=0; },0
+int result = a+b; return result;,0
+int count=0; while(count<n){ count++; },0
+"for(int i=0;i<n;i++){ printf(""%d"", i); }",0
+int x = 10; int y = x * 2; return y;,0
+for(int i=0;i<n;i++){ total = total + i; },0
+if (ready) { start(); },0
+for(int i=0;i<n;i++){ int len=strlen(s); if(i<len){ total+=i; } },1
+"for(int i=0;i<n;i++){ int x=pow(a,2); total+=x; }",1
+"for(int i=0;i<n;i++){ result = calculate(a,b); }",1
+for(int i=0;i<n;i++){ p = malloc(sizeof(int)); },1
+if(a>0){x=1;} if(a>0){y=2;} if(a>0){z=3;},1
+for(int i=0;i<n;i++){ int len=strlen(text); } for(int j=0;j<n;j++){ int len=strlen(text); },1
+for(int i=0;i<n;i++){ total += a*b; total += a*b; },1
+for(int i=0;i<n;i++){ value = stoi(text); },1
+for(int i=0;i<n;i++){ new_item = new Item(); },1
+for(int i=0;i<n;i++){ if(flag){ if(flag){ total++; } } },1
+int sum=0; for(int i=0;i<n;i++){sum+=i;} return sum;,0
+int max=a; if(b>max){max=b;} return max;,0
+for(int i=0;i<n;i++){ total += i*i; },0
+"int area=width*height; printf(""%d"",area);",0
+for(int i=0;i<n;i++){ convert_to_string(value); },1
+for(int i=0;i<n;i++){ buffer = malloc(size); free(buffer); },1
+if(x==0){handle();} else if(x==1){handle2();},0
+for(int i=0;i<n;i++){ if(i%2==0){ total++; } },0
+for(int i=0;i<n;i++){ if(a==b){x++;} if(a==b){y++;} },1
+int answer = input * 3; return answer;,0
+"int binary_search(int arr[], int n, int x) { int l=0, r=n-1; while(l<=r) { int m = l+(r-l)/2; if(arr[m]==x) return m; if(arr[m]<x) l=m+1; else r=m-1; } return -1; }",0
+long long factorial(int n) { long long res = 1; for(int i=1; i<=n; i++) { res *= i; } return res; },0
+"void reverse_arr(int arr[], int n) { int l=0, r=n-1; while(l<r) { int t=arr[l]; arr[l]=arr[r]; arr[r]=t; l++; r--; } }",0
+int sum_mat(int m[4][4]) { int s=0; for(int i=0; i<4; i++) { for(int j=0; j<4; j++) { s += m[i][j]; } } return s; },0
+void alloc_process(int n) { int* p = (int*)malloc(n*sizeof(int)); for(int i=0; i<n; i++) { p[i]=i; } free(p); },0
+"int find_element(int a[], int n, int k) { for(int i=0; i<n; i++) { if(a[i]==k) return i; } return -1; }",0
+"#include <stdio.h>
+int main(void) {
+    int values[] = {1, 2, 3, 4, 5};
+    int total = 0;
+    int count = 5;
+    for (int i = 0; i < count; i++) {
+        total += values[i];
+    }
+    printf(""%d\n"", total);
+    return 0;
+}",0
+"void print_range(int start, int end) { for(int i=start; i<=end; i++) { printf(""%d "", i); } }",0
+"int max_val(int a, int b) { if(a > b) return a; else return b; }",0
+"double average(int arr[], int n) { int sum=0; for(int i=0; i<n; i++) { sum+=arr[i]; } return (double)sum/n; }",0
+"#include <stdio.h>
+#include <string.h>
+int main(void) {
+    char name[] = ""compiler"";
+    int total = 0;
+    for (int i = 0; i < 100; i++) {
+        int length = (int)strlen(name);
+        if (i < length) {
+            total += i;
+        }
+    }
+    printf(""%d\n"", total);
+    return 0;
+}",1
+void leak_in_loop(int n) { for(int i=0; i<n; i++) { int* chunk = (int*)malloc(128*sizeof(int)); chunk[0]=i; free(chunk); } },1
+"void repeated_pow(int n, double x) { double tot = 0; for(int i=0; i<n; i++) { tot += pow(x, 2.0); tot += pow(x, 2.0); } }",1
+"void nested_redundant(int n, int f) { int c=0; for(int i=0; i<n; i++) { if(f>0) { if(f>0) { if(f>0) { c++; } } } } }",1
+"void loop_strtol(int n, char* s) { int sum=0; for(int i=0; i<n; i++) { sum += atoi(s); } }",1
+for(int i=0; i<strlen(text); i++) { putchar(text[i]); },1
+for(int i=0; i<n; i++) { Item* it = new Item(); delete it; },1
+for(int i=0; i<n; i++) { double val = sqrt(144.0); sum += val; },1
+for(int i=0; i<n; i++) { int len = (int)strlen(s); sum += len; },1
+"for(int i=0; i<n; i++) { p = (char*)malloc(50); strcpy(p, s); free(p); }",1
